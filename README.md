@@ -2,16 +2,13 @@
 
 _Some things just need a little longer in the oven_
 
-## To-do
+## Goals
 
-[] TypeScript, TSLint
-[] Auth login flow example
-[] Context for app level state example
-[] Code splitting routes
-[] Cypress, React Testing Library
-[] Mock API server
-[] Example navigation and pages
-[] Data grid
+- [] Auth login flow example
+- [] Code splitting routes example
+- [] Cypress, React Testing Library example
+- [] Mock API server example
+- [] State machine example
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
