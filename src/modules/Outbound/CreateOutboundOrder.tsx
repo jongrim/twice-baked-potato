@@ -1,27 +1,27 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { Machine, assign, EventObject } from 'xstate';
-import { useMachine } from '@xstate/react';
+import React from "react"
+import { Formik, Form, Field, ErrorMessage } from "formik"
+import { Machine, assign, EventObject } from "xstate"
+import { useMachine } from "@xstate/react"
 
 interface FetchMachineCtx {
-  data: { data: object } | undefined;
-  retries: number;
+  data: { data: object } | undefined
+  retries: number
 }
 
 interface FetchStateSchema {
   states: {
-    idle: {};
-    loading: {};
-    success: {};
-    failure: {};
-  };
+    idle: {}
+    loading: {}
+    success: {}
+    failure: {}
+  }
 }
 
-type FetchEvent = { type: 'FETCH'; userId: string } | { type: 'RETRY' };
+type FetchEvent = { type: "FETCH"; userId: string } | { type: "RETRY" }
 
 const fetchMachine = Machine<FetchMachineCtx, FetchStateSchema, FetchEvent>({
-  id: 'fetch',
-  initial: 'idle',
+  id: "fetch",
+  initial: "idle",
   context: {
     data: undefined,
     retries: 0
@@ -29,20 +29,20 @@ const fetchMachine = Machine<FetchMachineCtx, FetchStateSchema, FetchEvent>({
   states: {
     idle: {
       on: {
-        FETCH: 'loading'
+        FETCH: "loading"
       }
     },
     loading: {
       invoke: {
-        src: 'fetchResource',
+        src: "fetchResource",
         onDone: {
-          target: 'success',
+          target: "success",
           actions: assign({
             data: (_, event) => event.data
           })
         },
         onError: {
-          target: 'failure',
+          target: "failure",
           actions: assign({
             data: (_, event) => event.data
           })
@@ -50,12 +50,12 @@ const fetchMachine = Machine<FetchMachineCtx, FetchStateSchema, FetchEvent>({
       }
     },
     success: {
-      type: 'final'
+      type: "final"
     },
     failure: {
       on: {
         RETRY: {
-          target: 'loading',
+          target: "loading",
           actions: assign({
             data: context => context.data,
             retries: context => context.retries + 1
@@ -64,59 +64,60 @@ const fetchMachine = Machine<FetchMachineCtx, FetchStateSchema, FetchEvent>({
       }
     }
   }
-});
+})
 
 const fetchResource = (ctx: FetchMachineCtx, event: EventObject) => {
   return new Promise((resolve, reject) => {
-    console.log('fetching...', event);
+    console.log("fetching...", event)
     setTimeout(() => {
-      const r = Math.random();
+      const r = Math.random()
       if (r < 0.5) {
-        resolve({ response: 'hi' });
+        resolve({ response: "hi" })
       } else {
-        reject(new Error('ERROR'));
+        reject(new Error("ERROR"))
       }
-    }, 3000);
-  });
-};
+    }, 3000)
+  })
+}
 
-const Outbound = () => {
+const CreateOutboundOrder = () => {
   const [current, send] = useMachine(fetchMachine, {
     services: {
       fetchResource
     }
-  });
-  let nextMessage: FetchEvent;
+  })
+  let nextMessage: FetchEvent
   switch (current.value) {
-    case 'idle':
-      nextMessage = { type: 'FETCH', userId: '1' };
-      break;
-    case 'failure':
-      nextMessage = { type: 'RETRY' };
-      break;
+    case "idle":
+      nextMessage = { type: "FETCH", userId: "1" }
+      break
+    case "failure":
+      nextMessage = { type: "RETRY" }
+      break
   }
   return (
     <div>
       <h1>Any place in your app!</h1>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: "", password: "" }}
         validate={values => {
-          let errors: { email?: string } = {};
+          let errors: { email?: string } = {}
           if (!values.email) {
-            errors.email = 'Required';
+            errors.email = "Required"
           } else if (
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
           ) {
-            errors.email = 'Invalid email address';
+            errors.email = "Invalid email address"
           }
-          return errors;
+          return errors
         }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}>
+            alert(JSON.stringify(values, null, 2))
+            setSubmitting(false)
+          }, 400)
+        }}
+      >
         {({ isSubmitting }) => (
           <Form>
             <label>
@@ -129,19 +130,20 @@ const Outbound = () => {
               <Field type="password" name="password" />
               <ErrorMessage name="password" component="div" />
             </label>
-            {current.value !== 'success' && (
+            {current.value !== "success" && (
               <button
                 type="submit"
-                disabled={current.value === 'loading'}
-                onClick={() => send(nextMessage)}>
-                {current.value === 'loading' ? 'Loading' : 'Submit'}
+                disabled={current.value === "loading"}
+                onClick={() => send(nextMessage)}
+              >
+                {current.value === "loading" ? "Loading" : "Submit"}
               </button>
             )}
           </Form>
         )}
       </Formik>
     </div>
-  );
-};
+  )
+}
 
-export default Outbound;
+export default CreateOutboundOrder
