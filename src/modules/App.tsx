@@ -4,6 +4,7 @@ import { Box, Button, Flex } from "rebass"
 import { ThemeProvider } from "theme-ui"
 import AuthProvider, { AuthContext } from "./AuthProvider"
 import Navbar from "./Navbar"
+import Sidebar from "../components/Sidebar"
 import theme from "./theme.json"
 
 function App() {
@@ -18,21 +19,32 @@ const Outbound = React.lazy(() => import("./Outbound"))
 export function AuthenticatedApp() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Switch>
-          <Route exact path="/">
-            <div>Home</div>
-          </Route>
-          <Route path="/outbound">
-            <Outbound />
-          </Route>
-          <Route path="/inbound">
-            <div>Inbound</div>
-          </Route>
-          <Route path="/">Not found</Route>
-        </Switch>
-      </Suspense>
+      <Flex flexDirection="column" height="100%">
+        <Navbar />
+        <Flex sx={{ flexGrow: "1" }}>
+          <Box sx={{ flex: "1" }}>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Switch>
+                <Route exact path="/">
+                  <Box bg="background">Home</Box>
+                </Route>
+                <Route path="/outbound">
+                  <Outbound />
+                </Route>
+                <Route path="/inbound">
+                  <div>Inbound</div>
+                </Route>
+                <Route path="/">Not found</Route>
+              </Switch>
+            </Suspense>
+          </Box>
+          <Sidebar>
+            <Box flex="0 0 100%">
+              <Button>Action</Button>
+            </Box>
+          </Sidebar>
+        </Flex>
+      </Flex>
     </BrowserRouter>
   )
 }

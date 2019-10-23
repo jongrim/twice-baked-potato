@@ -9,7 +9,7 @@ export default function NavLink({ ...props }) {
     <Link
       {...props}
       color={isActive ? "secondary" : "text"}
-      sx={{ textDecoration: "none", fontWeight: "bold" }}
+      sx={{ textDecoration: "none", fontWeight: "bold", fontFamily: "body" }}
       as={RouterNavLink}
       variant="nav"
     />

@@ -15,7 +15,7 @@ export default function Navbar() {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Text fontWeight="bold">
+          <Text fontFamily="body" fontWeight="bold">
             Twice Baked Potato{" "}
             <span role="img" aria-label="potato">
               🥔
