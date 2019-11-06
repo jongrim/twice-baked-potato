@@ -5,6 +5,9 @@
       "background": "white",
       "border": "1px solid",
       "borderColor": "primary"
+    },
+    "ghost": {
+      "background": "none"
     }
   },
   "space": [0, 4, 8, 16, 32, 64, 128, 256, 512],

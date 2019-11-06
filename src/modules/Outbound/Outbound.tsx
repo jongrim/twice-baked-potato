@@ -1,11 +1,12 @@
 import React from "react"
 import { Machine, assign } from "xstate"
 import { useMachine } from "@xstate/react"
-import { Heading, Box } from "rebass"
+import { Box, Flex, Heading } from "rebass"
 import { getOrders } from "../../services/orders"
+import { makeOrderOperator, getProp, Order } from "../../data/Orders"
 
 interface FetchMachineCtx {
-  data: { data: object } | undefined
+  data: Order[] | undefined
   retries: number
 }
 
@@ -69,14 +70,17 @@ const Outbound = () => {
       getOrders
     }
   })
-  console.log(current)
   return (
-    <div>
+    <Box height="100%" width="100%">
       <Heading as="h1">Outbound Orders</Heading>
-      {current.value === "success" && (
-        <Box>{JSON.stringify(current.context.data)}</Box>
-      )}
-    </div>
+      <Box>
+        {current.value === "success" &&
+          current.context.data &&
+          current.context.data.map(o => {
+            const order = makeOrderOperator(o)
+          })}
+      </Box>
+    </Box>
   )
 }
 

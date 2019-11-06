@@ -2,9 +2,16 @@ import React, { Suspense } from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import { Box, Button, Flex } from "rebass"
 import { ThemeProvider } from "theme-ui"
+import {
+  faBox,
+  faSignOutAlt,
+  faShippingFast,
+  faChartBar
+} from "@fortawesome/free-solid-svg-icons"
 import AuthProvider, { AuthContext } from "./AuthProvider"
 import Navbar from "./Navbar"
 import Sidebar from "../components/Sidebar"
+import SidebarItem from "../components/SidebarItem"
 import theme from "./theme.json"
 
 function App() {
@@ -21,8 +28,14 @@ export function AuthenticatedApp() {
     <BrowserRouter>
       <Flex flexDirection="column" height="100%">
         <Navbar />
-        <Flex sx={{ flexGrow: "1" }}>
-          <Box sx={{ flex: "1" }}>
+        <Flex flex="1">
+          <Sidebar>
+            <SidebarItem icon={faBox} label="Create Inbound" />
+            <SidebarItem icon={faShippingFast} label="Create Outbound" />
+            <SidebarItem icon={faChartBar} label="View Reports" />
+            <SidebarItem icon={faSignOutAlt} label="Sign Out" />
+          </Sidebar>
+          <Flex py={3} px={3} flex="1">
             <Suspense fallback={<div>Loading...</div>}>
               <Switch>
                 <Route exact path="/">
@@ -37,12 +50,7 @@ export function AuthenticatedApp() {
                 <Route path="/">Not found</Route>
               </Switch>
             </Suspense>
-          </Box>
-          <Sidebar>
-            <Box flex="0 0 100%">
-              <Button>Action</Button>
-            </Box>
-          </Sidebar>
+          </Flex>
         </Flex>
       </Flex>
     </BrowserRouter>
