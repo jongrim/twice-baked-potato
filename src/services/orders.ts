@@ -5,12 +5,12 @@ export function getOrders() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const r = Math.random()
-      if (r < 0.5) {
+      if (r < 0.9) {
         resolve(orders)
       } else {
         reject(new Error("ERROR"))
       }
-    }, 3000)
+    }, 1000)
   })
   // return fetch(`${POSTMAN_API}/getOrders`, {
   //   method: "GET",

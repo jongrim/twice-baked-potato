@@ -13,7 +13,7 @@ export default function NavLink({ ...props }) {
           display: "block",
           width: "0px",
           height: "4px",
-          backgroundColor: "#9c27b0",
+          backgroundColor: theme => theme.colors.secondary,
           transition: "width .3s ease-out"
         },
         ":hover::after": {

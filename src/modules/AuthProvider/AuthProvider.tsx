@@ -89,7 +89,13 @@ function AuthProvider() {
     <AuthContext.Provider
       value={{ authReady, isAuthenticated, user, signIn, signOut }}
     >
-      {true ? <AuthenticatedApp /> : <NotAuthenticatedApp />}
+      {process.env.NODE_ENV === "development" ? (
+        <AuthenticatedApp />
+      ) : isAuthenticated ? (
+        <AuthenticatedApp />
+      ) : (
+        <NotAuthenticatedApp />
+      )}
     </AuthContext.Provider>
   )
 }

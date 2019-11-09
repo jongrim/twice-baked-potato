@@ -1,9 +1,11 @@
 import React from "react"
 import { Machine, assign } from "xstate"
 import { useMachine } from "@xstate/react"
-import { Box, Flex, Heading } from "rebass"
+import { Box, Button, Flex } from "rebass"
+import Loading from "../../components/Loading"
 import { getOrders } from "../../services/orders"
-import { makeOrderOperator, getProp, Order } from "../../data/Orders"
+import { Order } from "../../data/Orders"
+import AciveOrderManager from "./Orders"
 
 interface FetchMachineCtx {
   data: Order[] | undefined
@@ -72,14 +74,21 @@ const Outbound = () => {
   })
   return (
     <Box height="100%" width="100%">
-      <Heading as="h1">Outbound Orders</Heading>
-      <Box>
-        {current.value === "success" &&
-          current.context.data &&
-          current.context.data.map(o => {
-            const order = makeOrderOperator(o)
-          })}
-      </Box>
+      {current.value === "loading" && (
+        <Flex height="100%" alignItems="center" justifyContent="center">
+          <Loading />
+        </Flex>
+      )}
+      {current.value === "success" && (
+        <AciveOrderManager orders={current.context.data as Order[]} />
+      )}
+      {current.value === "failure" && (
+        <Flex height="100%" alignItems="center" justifyContent="center">
+          <Button bg="secondary" onClick={() => send("RETRY")}>
+            Retry loading orders
+          </Button>
+        </Flex>
+      )}
     </Box>
   )
 }

@@ -1,6 +1,6 @@
 import React, { ReactChild, useCallback, useRef } from "react"
 import { Box, Flex } from "rebass"
-import { Machine, assign, StateValue } from "xstate"
+import { Machine, assign } from "xstate"
 import { useMachine } from "@xstate/react"
 import { TweenMax, Elastic } from "gsap"
 import SidebarItem from "../SidebarItem"
@@ -52,7 +52,7 @@ const SidebarMachine = Machine<
             target: "closed"
           }
         },
-        entry: ["setToggleIconOff", "setLabelsNotVisible"]
+        entry: ["setToggleIconOff"]
       },
       opening: {
         on: {
@@ -64,7 +64,7 @@ const SidebarMachine = Machine<
             target: "open"
           }
         },
-        entry: ["setToggleIconOn", "setLabelsVisible"]
+        entry: ["setToggleIconOn"]
       },
       open: {
         on: {

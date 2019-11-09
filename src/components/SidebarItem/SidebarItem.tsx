@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react"
-import { Box, Button, Flex, Text } from "rebass"
+import { Box, Button, Flex } from "rebass"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 
@@ -13,36 +13,13 @@ function SidebarItem({
   onClick?: MouseEventHandler
 }) {
   return (
-    <Flex mx={2} my={3} onClick={onClick}>
+    <Flex mx={2} my={3}>
       <Box flex={1} sx={{ whiteSpace: "nowrap", overflow: "hidden" }}>
-        <Text
-          fontFamily="body"
-          fontWeight="bold"
-          px={2}
-          py={2}
-          sx={{
-            display: "inline-block",
-            borderRadius: "12px",
-            ":hover": {
-              cursor: "pointer",
-              backgroundColor: "rgba(255, 255, 255, 0.1)"
-            }
-          }}
-        >
+        <Button variant="ghost" sx={{ fontWeight: "bold" }} onClick={onClick}>
           {label}
-        </Text>
+        </Button>
       </Box>
-      <Button
-        color="muted"
-        variant="ghost"
-        sx={{
-          borderRadius: "12px",
-          ":hover": {
-            cursor: "pointer",
-            backgroundColor: "rgba(255, 255, 255, 0.1)"
-          }
-        }}
-      >
+      <Button color="muted" variant="ghost" onClick={onClick}>
         <FontAwesomeIcon icon={icon} size="lg" />
       </Button>
     </Flex>

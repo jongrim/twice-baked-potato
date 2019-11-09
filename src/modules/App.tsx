@@ -26,16 +26,16 @@ const Outbound = React.lazy(() => import("./Outbound"))
 export function AuthenticatedApp() {
   return (
     <BrowserRouter>
-      <Flex flexDirection="column" height="100%">
+      <Flex flexDirection="column" height="100vh" sx={{ fontFamily: "body" }}>
         <Navbar />
-        <Flex flex="1">
+        <Flex flex="1" height="100%">
           <Sidebar>
             <SidebarItem icon={faBox} label="Create Inbound" />
             <SidebarItem icon={faShippingFast} label="Create Outbound" />
             <SidebarItem icon={faChartBar} label="View Reports" />
             <SidebarItem icon={faSignOutAlt} label="Sign Out" />
           </Sidebar>
-          <Flex py={3} px={3} flex="1">
+          <Flex flex="1" height="100%">
             <Suspense fallback={<div>Loading...</div>}>
               <Switch>
                 <Route exact path="/">
