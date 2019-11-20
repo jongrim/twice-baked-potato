@@ -82,7 +82,6 @@ type GetShipmentMethod = (order: Order) => string
 export const getShipmentMethod: GetShipmentMethod = R.compose(
   capitalize,
   R.toLower,
-  // @ts-ignore
   R.prop("shipmentMethod")
 )
 

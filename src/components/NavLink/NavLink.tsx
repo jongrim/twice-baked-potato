@@ -11,7 +11,7 @@ export default function NavLink({ ...props }) {
         "::after": {
           content: "''",
           display: "block",
-          width: "0px",
+          width: isActive ? "100%" : "0px",
           height: "4px",
           backgroundColor: theme => theme.colors.secondary,
           transition: "width .3s ease-out"
@@ -21,11 +21,10 @@ export default function NavLink({ ...props }) {
         }
       }}
       height="100%"
-      mx={6}
     >
       <Link
         {...props}
-        color={isActive ? "primary" : "muted"}
+        color="light"
         sx={{
           textDecoration: "none",
           fontWeight: "bold",

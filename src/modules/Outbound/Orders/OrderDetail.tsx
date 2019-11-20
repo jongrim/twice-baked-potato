@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Card, Text, Flex, Button } from "rebass"
+import { Box, Card, Text, Flex } from "rebass"
 import Order, {
   capitalize,
   getFormattedOrderCreatedTime,
@@ -7,6 +7,7 @@ import Order, {
 } from "../../../data/Orders"
 import OrderStatusIcon from "./OrderStatusIcon"
 import SfpBadge from "../../../components/SfpBadge"
+import OrderItems from "./OrderItems"
 
 function OrderDetail({ order }: { order: Order }) {
   return (
@@ -42,7 +43,7 @@ function OrderDetail({ order }: { order: Order }) {
         alignItems="center"
         justifyContent="center"
       >
-        <Text>{JSON.stringify(order)}</Text>
+        <OrderItems orderId={order.orderId} />
       </Flex>
     </Box>
   )

@@ -70,7 +70,8 @@ const Outbound = () => {
   const [current, send] = useMachine(fetchMachine, {
     services: {
       getOrders
-    }
+    },
+    devTools: true
   })
   return (
     <Box height="100%" width="100%">

@@ -271,6 +271,7 @@
     "0.25rem",
     "0.5rem",
     "1rem",
+    "1.5rem",
     "2rem",
     "4rem",
     "8rem",
@@ -490,6 +491,15 @@
       "&:hover": {
         "cursor": "pointer",
         "backgroundColor": "rgba(255, 255, 255, 0.1)"
+      }
+    },
+    "navlink": {
+      "fontWeight": "bold",
+      "color": "muted",
+      "backgroundColor": "transparent",
+      "borderRadius": "12px",
+      "&:hover": {
+        "cursor": "pointer"
       }
     }
   },

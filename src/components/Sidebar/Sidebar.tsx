@@ -103,7 +103,7 @@ function Sidebar({ children }: { children: ReactChild | ReactChild[] }) {
         onComplete: resolve
       })
     })
-  }, [element.current])
+  }, [])
   const closeMenu = useCallback(() => {
     return new Promise(resolve => {
       TweenMax.to(element.current || {}, 0.5, {
@@ -113,7 +113,7 @@ function Sidebar({ children }: { children: ReactChild | ReactChild[] }) {
         onComplete: resolve
       })
     })
-  }, [element.current])
+  }, [])
 
   const [current, send] = useMachine(SidebarMachine, {
     services: {
@@ -141,6 +141,7 @@ function Sidebar({ children }: { children: ReactChild | ReactChild[] }) {
           icon={current.context.icon}
           label="Collapse"
           onClick={() => send(nextMessage)}
+          variant="action"
         />
       </Flex>
     </Box>

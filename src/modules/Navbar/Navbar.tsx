@@ -1,20 +1,35 @@
 import React from "react"
-import NavLink from "../../components/NavLink"
-import { Flex, Text } from "rebass"
+import { Link } from "react-router-dom"
+import { Box, Flex, Image, Text } from "rebass"
+import { useAuth0 } from "../AuthProvider/AuthProvider"
 
 export default function Navbar() {
+  const { user } = useAuth0()
   return (
-    <Flex px={3} py={3} color="background" bg="text" alignItems="center">
+    <Flex
+      px={4}
+      py={3}
+      color="background"
+      bg="text"
+      alignItems="center"
+      justifyContent="space-between"
+    >
       <Text fontFamily="body" fontWeight="bold">
-        TBP{" "}
-        <span role="img" aria-label="potato">
+        TBP
+        <Box pl={2} role="img" aria-label="potato" display="inline-block">
           🥔
-        </span>
+        </Box>
       </Text>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/inbound">Inbound</NavLink>
-      <NavLink to="/outbound">Outbound</NavLink>
-      <NavLink to="/inventory">Inventory</NavLink>
+      <Link to="/me">
+        <Image
+          src={user.picture}
+          sx={{
+            width: 10,
+            height: 10,
+            borderRadius: 9999
+          }}
+        />
+      </Link>
     </Flex>
   )
 }

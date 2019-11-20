@@ -1,101 +1,101 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { AuthenticatedApp, NotAuthenticatedApp } from "../App"
-import credentials from "./credentials.json"
-
-declare global {
-  interface Window {
-    gapi: {
-      load: Function
-      auth2: {
-        getAuthInstance: Function
-        init: Function
-      }
-      signin2: {
-        render: Function
-      }
-    }
-    init: Function
-  }
-}
+import createAuth0Client from "@auth0/auth0-spa-js"
 
 export const AuthContext = React.createContext({
-  authReady: false,
   isAuthenticated: false,
-  user: {},
-  signIn: () => {},
-  signOut: () => {}
+  user: {
+    email: "",
+    name: "",
+    nickname: "",
+    picture: "",
+    sub: "",
+    updated_at: ""
+  },
+  logout: () => {},
+  loginWithPopup: () => {},
+  getIdTokenClaims: () => {},
+  loginWithRedirect: () => {},
+  getTokenSilently: () => {},
+  getTokenWithPopup: () => {}
 })
+
+export const useAuth0 = () => useContext(AuthContext)
 
 function AuthProvider() {
   // just a simple login - more robust implementation would look for a token in localStorage
-  const [authLoaded, setAuthLoaded] = useState(false)
-  const [authReady, setAuthReady] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [auth0, setAuth0] = useState()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({
+    email: "",
+    name: "",
+    nickname: "",
+    picture: "",
+    sub: "",
+    updated_at: ""
+  })
 
   useEffect(() => {
-    if (!authReady && authLoaded) {
-      window.gapi.load("auth2", () => {
-        window.gapi.auth2
-          .init({
-            client_id: credentials.web.client_id
-          })
-          .then(() => {
-            setAuthReady(true)
-          })
+    const initAuth0 = async () => {
+      const auth0FromHook = await createAuth0Client({
+        domain: "dev-gmwurb0n.auth0.com",
+        client_id: "Iwo5jMsStmjr2KWR1NZGvLTiMvCmLV1n"
       })
-    } else if (!authLoaded && !authReady && window.gapi) {
-      window.gapi.load("auth2", () => {
-        window.gapi.auth2
-          .init({
-            client_id: credentials.web.client_id
-          })
-          .then(() => {
-            setAuthReady(true)
-          })
-      })
+      setAuth0(auth0FromHook)
+
+      const isAuthenticated = await auth0FromHook.isAuthenticated()
+
+      setIsAuthenticated(isAuthenticated)
+
+      if (isAuthenticated) {
+        const user = await auth0FromHook.getUser()
+        setUser(user)
+      }
+
+      setLoading(false)
     }
-  }, [authReady, authLoaded])
+    initAuth0()
+  }, [])
 
-  window.init = function init() {
-    setAuthLoaded(true)
+  const loginWithPopup = async (params = {}) => {
+    try {
+      await auth0.loginWithPopup(params)
+      const user = await auth0.getUser()
+      setUser(user)
+      setIsAuthenticated(true)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  function onSignIn(googleUser: { getBasicProfile: Function }) {
-    const profile = googleUser.getBasicProfile()
-    setUser(profile)
-    setIsAuthenticated(true)
-  }
+  // const handleRedirectCallback = async () => {
+  //   setLoading(true)
+  //   await auth0.handleRedirectCallback()
+  //   const user = await auth0.getUser()
+  //   setLoading(false)
+  //   setIsAuthenticated(true)
+  //   setUser(user)
+  // }
 
-  function signOut() {
-    const auth = window.gapi.auth2.getAuthInstance()
-    auth.signOut().then(() => {
-      setIsAuthenticated(false)
-      setUser({})
-    })
-  }
-
-  function signIn() {
-    const auth = window.gapi.auth2.getAuthInstance()
-    auth
-      .signIn({
-        prompt: "select_account",
-        scope: "profile email"
-      })
-      .then(onSignIn)
+  if (loading) {
+    return <div>LOADING</div>
   }
 
   return (
     <AuthContext.Provider
-      value={{ authReady, isAuthenticated, user, signIn, signOut }}
+      value={{
+        isAuthenticated,
+        user,
+        loginWithPopup,
+        getIdTokenClaims: (...rest) => auth0.getIdTokenClaims(...rest),
+        loginWithRedirect: (...rest) => auth0.loginWithRedirect(...rest),
+        getTokenSilently: (...rest) => auth0.getTokenSilently(...rest),
+        getTokenWithPopup: (...rest) => auth0.getTokenWithPopup(...rest),
+        logout: (...rest) => auth0.logout(...rest)
+      }}
     >
-      {process.env.NODE_ENV === "development" ? (
-        <AuthenticatedApp />
-      ) : isAuthenticated ? (
-        <AuthenticatedApp />
-      ) : (
-        <NotAuthenticatedApp />
-      )}
+      {isAuthenticated ? <AuthenticatedApp /> : <NotAuthenticatedApp />}
     </AuthContext.Provider>
   )
 }
